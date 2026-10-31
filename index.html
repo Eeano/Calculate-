@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Business Financial System - Emoji Charts</title>
+<style>:root{--p:#0b2e4e;--a:#0a8a4b;--bg:#f4f6f8;--card:#fff;--b:#d0d7de}*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:var(--bg)} .h{background:var(--p);color:#fff;padding:14px;display:flex;justify-content:space-between} .c{background:var(--card);margin:10px;border-radius:12px;padding:14px;border:1px solid var(--b)} .lab{font-size:11px;opacity:.6;text-transform:uppercase;margin:6px 0 3px} input,textarea{width:100%;padding:10px;border:1px solid var(--b);border-radius:8px} button{padding:10px 14px;border:0;border-radius:8px;background:var(--a);color:#fff;font-weight:700} .sec{background:#e9ecef;color:#111} .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px} .hid{display:none} .big{font-size:22px;font-weight:800} canvas{width:100%!important;max-height:240px}</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head><body>
+<div class="h"><b id="bizT">🏪 Business Financial System</b><span id="uBadge"></span></div>
+<div id="loginP"><div class="c"><h3>🔐 Create / Login</h3>
+<p class="lab">📱 Phone (0181628290)</p><input id="lu"><p class="lab">🔑 Password</p><input id="lp" type="password"><p class="lab">🏢 Business Name</p><input id="lb"><p class="lab">👤 Owner</p><input id="lo"><button id="lBtn" style="width:100%;margin-top:10px">➡️ Enter System</button>
+<p class="lab">💳 KSh 300 / month to 0181628290 | SHA-256 🔒 | Backup 💾</p></div></div>
+<div id="app" class="hid">
+<div class="c" style="background:#fff3cd"><h4>💳 Payment KSh 300/month to 📱 0181628290</h4><div class="g2"><button id="payBtn">✅ I Paid KSh 300</button><button class="sec" onclick="window.open('https://wa.me/254181628290?text='+encodeURIComponent('Paid 300 for '+localStorage.getItem('biz_name')),'_blank')">💬 WhatsApp 0181628290</button></div><p class="lab" id="payS"></p></div>
+<div class="c"><h3>📅 Today - Daily 💰💸</h3><div class="g2"><div><p class="lab">💰 Received Today</p><input id="dR" type="number"></div><div><p class="lab">💸 Used Today</p><input id="dU" type="number"></div></div><p class="lab">📈 Remaining (Auto) = 💰-💸</p><input id="dRem" readonly style="background:#e6f4ea;font-weight:700"><p class="lab">📝 Notes</p><textarea id="dN"></textarea><div class="g2" style="margin-top:8px"><button id="sD" style="flex:1">💾 Save Daily</button><button id="waD" class="sec">💬 WA 0181628290</button></div></div>
+<div class="c"><h3>📊 Normalized Emoji Chart - Daily</h3><canvas id="chartDaily"></canvas></div>
+<div class="c"><h3>🗓️ This Week Mon-Sun - Auto</h3><p class="lab" id="wLab"></p><div class="g2"><div><p class="lab">💰 Received</p><div class="big" id="wR">0</div></div><div><p class="lab">💸 Used</p><div class="big" id="wU">0</div></div></div><p class="lab">📈 Profit = 💰-💸</p><div class="big" id="wP" style="color:var(--a)">0</div><canvas id="chartWeek"></canvas></div>
+<div class="c"><h3>🗓️ Monthly - Auto</h3><p class="lab" id="mLab"></p><div class="g2"><div><p class="lab">💰 Received</p><div class="big" id="mR">0</div></div><div><p class="lab">💸 Used</p><div class="big" id="mU">0</div></div></div><div class="big" id="mP" style="color:var(--a)">0</div><canvas id="chartMonth"></canvas></div>
+<div class="c"><h3>📆 Yearly - 30 Dec Reminder</h3><p class="lab" id="yLab"></p><div class="g2"><div><p class="lab">💰 Received</p><div class="big" id="yR">0</div></div><div><p class="lab">💸 Used</p><div class="big" id="yU">0</div></div></div><div class="big" id="yP" style="color:var(--a)">0</div><canvas id="chartYear"></canvas><div class="g2" style="margin-top:8px"><button id="bck" class="sec">💾 Backup</button><button id="waM" class="sec">💬 WA Monthly to 0181628290</button></div></div>
+<div class="c"><h3>📜 History</h3><table style="width:100%;font-size:12px;border-collapse:collapse"><thead><tr><th>📅</th><th>💰</th><th>💸</th><th>📈</th><th>📝</th></tr></thead><tbody id="tb"></tbody></table></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let db=JSON.parse(localStorage.getItem('biz_db_v3')||'{"daily":[],"payUntil":0}');
+function today(){return new Date().toISOString().slice(0,10)}
+function monday(d=new Date()){let x=new Date(d);let day=x.getDay();let diff=x.getDate()-day+(day==0?-6:1);x.setDate(diff);return x.toISOString().slice(0,10)}
+function sunday(m){let d=new Date(m);d.setDate(d.getDate()+6);return d.toISOString().slice(0,10)}
+let cDaily,cWeek,cMonth,cYear;
+function drawCharts(){
+ let daily=db.daily.slice(-7);
+ let labels=daily.map(r=>'📅 '+r.date.slice(5));
+ let rData=daily.map(r=>r.received);
+ let uData=daily.map(r=>r.used);
+ let pData=daily.map(r=>r.remaining);
+ if(cDaily) cDaily.destroy();
+ cDaily=new Chart($('chartDaily'),{type:'bar',data:{labels:labels,datasets:[{label:'💰 Received',data:rData,backgroundColor:'#0a8a4b'},{label:'💸 Used',data:uData,backgroundColor:'#e63946'},{label:'📈 Remaining',data:pData,backgroundColor:'#0b2e4e'}]},options:{plugins:{legend:{labels:{usePointStyle:true}}},scales:{y:{beginAtZero:true}}}});
+ let mon=monday(); let sun=sunday(mon);
+ let thisWeek=db.daily.filter(x=>x.date>=mon&&x.date<=sun);
+ let wR=thisWeek.reduce((s,x)=>s+(+x.received||0),0); let wU=thisWeek.reduce((s,x)=>s+(+x.used||0),0);
+ $('wR').innerText=wR.toLocaleString();$('wU').innerText=wU.toLocaleString();$('wP').innerText=(wR-wU).toLocaleString();
+ $('wLab').innerText='🗓️ '+mon+' ➡️ '+sun;
+ if(cWeek) cWeek.destroy();
+ cWeek=new Chart($('chartWeek'),{type:'doughnut',data:{labels:['💰 Received','💸 Used','📈 Profit'],datasets:[{data:[wR,wU,Math.max(0,wR-wU)],backgroundColor:['#0a8a4b','#e63946','#0b2e4e']}]},options:{}});
+ let m=new Date().toISOString().slice(0,7); let thisM=db.daily.filter(x=>x.date.startsWith(m));
+ let mR=thisM.reduce((s,x)=>s+(+x.received||0),0); let mU=thisM.reduce((s,x)=>s+(+x.used||0),0);
+ $('mR').innerText=mR.toLocaleString();$('mU').innerText=mU.toLocaleString();$('mP').innerText=(mR-mU).toLocaleString();$('mLab').innerText='🗓️ '+m;
+ if(cMonth) cMonth.destroy();
+ cMonth=new Chart($('chartMonth'),{type:'bar',data:{labels:['💰 Received','💸 Used','📈 Profit'],datasets:[{label:'🗓️ '+m,data:[mR,mU,mR-mU],backgroundColor:['#0a8a4b','#e63946','#0b2e4e']}]},options:{}});
+ let y=new Date().getFullYear().toString(); let thisY=db.daily.filter(x=>x.date.startsWith(y));
+ let yR=thisY.reduce((s,x)=>s+(+x.received||0),0); let yU=thisY.reduce((s,x)=>s+(+x.used||0),0);
+ $('yR').innerText=yR.toLocaleString();$('yU').innerText=yU.toLocaleString();$('yP').innerText=(yR-yU).toLocaleString();$('yLab').innerText='📆 '+y;
+ if(cYear) cYear.destroy();
+ cYear=new Chart($('chartYear'),{type:'line',data:{labels:db.daily.map(r=>r.date),datasets:[{label:'💰 Received',data:db.daily.map(r=>r.received),borderColor:'#0a8a4b',tension:.3},{label:'💸 Used',data:db.daily.map(r=>r.used),borderColor:'#e63946',tension:.3},{label:'📈 Remaining',data:db.daily.map(r=>r.remaining),borderColor:'#0b2e4e',tension:.3}]},options:{}});
+ $('tb').innerHTML=db.daily.slice().reverse().map(r=>`<tr><td>📅 ${r.date}</td><td>💰 ${r.received}</td><td>💸 ${r.used}</td><td>📈 ${r.remaining}</td><td>📝 ${r.notes||''}</td></tr>`).join('');
+ localStorage.setItem('biz_db_v3',JSON.stringify(db));
+}
+async function hash(p){let b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+$('lBtn').onclick=async()=>{
+ let u=$('lu').value.trim(), pw=$('lp').value, biz=$('lb').value.trim();
+ if(!u||!pw||!biz){alert('⚠️ Enter phone, password, business');return}
+ let h=await hash(pw); let auth=JSON.parse(localStorage.getItem('biz_auth')||'{}');
+ if(!auth[u]){auth[u]={hash:h,biz:biz};localStorage.setItem('biz_auth',JSON.stringify(auth))}else if(auth[u].hash!==h){alert('❌ Wrong password');return}
+ localStorage.setItem('biz_user',u);localStorage.setItem('biz_name',biz);
+ $('loginP').classList.add('hid');$('app').classList.remove('hid');$('bizT').innerText='🏪 '+biz;$('uBadge').innerText='👤 '+u;drawCharts();
+};
+$('dR').oninput=$('dU').oninput=()=>{$('dRem').value=(+$('dR').value||0)-(+$('dU').value||0)};
+$('sD').onclick=()=>{
+ let r=+$('dR').value||0,u=+$('dU').value||0; if(!r&&!u){alert('Enter 💰 or 💸');return}
+ let rec={date:today(),received:r,used:u,remaining:r-u,notes:$('dN').value};
+ let i=db.daily.findIndex(d=>d.date==rec.date); if(i>=0) db.daily[i]=rec; else db.daily.push(rec);
+ drawCharts(); alert('✅ Saved 📅 '+rec.date+' 💰 '+r+' 💸 '+u+' 📈 '+(r-u));
+};
+$('waD').onclick=()=>{let msg=`🏪 ${localStorage.getItem('biz_name')} 📅 ${today()} 💰 KSh ${$('dR').value} 💸 KSh ${$('dU').value} 📈 KSh ${$('dRem').value} 📝 ${$('dN').value}`;window.open('https://wa.me/254181628290?text='+encodeURIComponent(msg),'_blank')};
+$('waM').onclick=()=>{let msg=`🏪 ${localStorage.getItem('biz_name')} 🗓️ Monthly 💰 ${$('mR').innerText} 💸 ${$('mU').innerText} 📈 ${$('mP').innerText}`;window.open('https://wa.me/254181628290?text='+encodeURIComponent(msg),'_blank')};
+$('payBtn').onclick=()=>{db.payUntil=Date.now()+30*24*60*60*1000;localStorage.setItem('biz_db_v3',JSON.stringify(db));$('payS').innerText='✅ Paid until '+new Date(db.payUntil).toLocaleDateString()+' 📅';window.open('https://wa.me/254181628290?text='+encodeURIComponent('Paid 300 for '+localStorage.getItem('biz_name')),'_blank')};
+$('bck').onclick=()=>{let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup-'+today()+'.json';a.click()};
+if(localStorage.getItem('biz_user')){$('lu').value=localStorage.getItem('biz_user');$('lb').value=localStorage.getItem('biz_name')||''; $('loginP').classList.add('hid');$('app').classList.remove('hid');$('bizT').innerText='🏪 '+(localStorage.getItem('biz_name')||'Business');drawCharts();}
+</script></body></html>
