@@ -1,116 +1,149 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Business System - Fixed Login</title>
-<style>body{margin:0;background:#f4f6f8;font-family:system-ui;padding-bottom:70px}.h{background:#0b2e4e;color:#fff;padding:14px;text-align:center}.c{background:#fff;margin:10px;border-radius:12px;padding:14px;border:1px solid #d0d7de}.lab{font-size:11px;opacity:.6;text-transform:uppercase;margin:6px 0 3px}input,textarea{width:100%;padding:12px;border:1px solid #d0d7de;border-radius:8px}button{padding:13px;border:0;border-radius:8px;background:#0a8a4b;color:#fff;font-weight:900;width:100%;margin-top:10px;font-size:16px}.danger{background:#dc3545}.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.hid{display:none}.big{font-size:22px;font-weight:900}.footer{position:fixed;bottom:0;left:0;right:0;background:#0b2e4e;color:#fff;text-align:center;padding:10px;font-size:12px}.footer a{color:#25D366}.bizTop{font-size:21px;font-weight:900}.alertBox{background:#ff4444;color:#fff;padding:10px;border-radius:10px;display:none;position:fixed;top:60px;left:10px;right:10px;z-index:99;text-align:center;font-weight:700}canvas{width:100%!important;max-height:220px}</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head><body>
-<div class="h"><div class="bizTop" id="bizT">🏪 Business System</div></div>
-<div id="alertBox" class="alertBox"></div>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Business - Login Fixed</title>
+<style>
+body{margin:0;background:#f4f6f8;font-family:system-ui}
+.h{background:#0b2e4e;color:#fff;padding:14px;text-align:center;font-weight:900;font-size:20px}
+.loginWrap{padding:15px}
+.card{background:#fff;border-radius:16px;padding:18px;border:2px solid #0b2e4e;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.lab{font-size:12px;opacity:.7;font-weight:700;margin:10px 0 4px;display:block}
+input{width:100%;padding:14px;border:2px solid #d0d7de;border-radius:10px;font-size:16px;box-sizing:border-box}
+.loginBtn{width:100%;padding:18px;background:#0a8a4b;color:#fff;font-weight:900;font-size:18px;border:0;border-radius:12px;margin-top:16px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;z-index:999}
+.loginBtn:active{background:#076d3b;transform:scale(0.98)}
+.resetBtn{width:100%;padding:12px;background:#ff4444;color:#fff;font-weight:700;font-size:14px;border:0;border-radius:10px;margin-top:10px;cursor:pointer}
+#msg{font-weight:800;text-align:center;margin-top:12px;min-height:20px;font-size:15px}
+.footer{position:fixed;bottom:0;left:0;right:0;background:#0b2e4e;color:#fff;text-align:center;padding:12px;font-size:12px;z-index:10}
+.footer a{color:#25D366}
+.hid{display:none}
+.big{font-size:22px;font-weight:900}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.c{background:#fff;margin:10px;border-radius:12px;padding:14px;border:1px solid #d0d7de}
+canvas{width:100%!important;max-height:220px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head><body>
 
-<div id="loginP"><div class="c">
-<h3>🔐 LOGIN - WORKS 100%</h3>
-<p class="lab">📱 Phone - e.g. 0181628290</p><input id="lu" value="0181628290">
-<p class="lab">🔑 Password - First time you set it, second time you use same</p><input id="lp" type="text" placeholder="Set password e.g. 1234" value="">
-<p class="lab">🏢 Business Name - Shows on TOP only</p><input id="lb" placeholder="Type business name" value="My Business">
-<button onclick="doLogin()">➡️ TAP TO LOGIN - WORKS</button>
-<button class="danger" onclick="resetAll()">🔄 RESET PASSWORD (if forgot)</button>
-<p id="msg" style="font-weight:800;margin-top:10px;text-align:center"></p>
-<p class="lab">If login not working, tap RESET then set new password</p>
-</div></div>
+<div class="h">🏪 Business Financial System</div>
 
-<div id="app" class="hid">
-<div class="c"><h3>📅 Daily Entry - Auto New Sheet</h3>
-<div id="savedMsg" style="display:none;background:#e6f4ea;padding:8px;border-radius:8px">✅ Saved! New sheet ready</div>
-<div class="g2"><div><p class="lab">💰 Received Today</p><input id="dR" type="number"></div><div><p class="lab">💸 Used Today</p><input id="dU" type="number"></div></div>
-<p class="lab">📈 Remaining Auto = Received - Used</p><input id="dRem" readonly style="background:#e6f4ea;font-weight:800">
-<p class="lab">📝 Notes</p><textarea id="dN"></textarea>
-<button onclick="saveDaily()">💾 Save Daily - New Sheet Auto</button>
-<p class="lab" id="sheetInfo">📄 New Sheet</p>
+<!-- LOGIN - FIXED TAP BOX -->
+<div id="loginP" class="loginWrap">
+<div class="card">
+<h3 style="margin:0 0 10px;text-align:center">🔐 LOGIN - TAP THE GREEN BOX BELOW</h3>
+
+<label class="lab">📱 Phone Number</label>
+<input id="lu" type="tel" value="0181628290">
+
+<label class="lab">🔑 Password - First time sets it, next time same password</label>
+<input id="lp" type="text" placeholder="Set password e.g. 1234" autocomplete="off">
+
+<label class="lab">🏢 Business Name - Shows on TOP only</label>
+<input id="lb" type="text" placeholder="e.g. Eeano Shop" value="">
+
+<!-- THIS BUTTON NOW WORKS - BIG GREEN TAP BOX -->
+<button class="loginBtn" id="mainLoginBtn" type="button" onclick="doLogin()">✅ TAP HERE TO LOGIN ➡️</button>
+
+<button class="resetBtn" type="button" onclick="resetAll()">🔄 RESET PASSWORD IF FORGOT</button>
+
+<div id="msg"></div>
+</div>
 </div>
 
-<div class="c"><h3>🗓️ Weekly Total Mon-Sun - Auto</h3><p class="lab" id="wLab"></p>
-<div class="g2"><div><p class="lab">💰 Received</p><div class="big" id="wR">0</div></div><div><p class="lab">💸 Used</p><div class="big" id="wU">0</div></div></div>
-<p class="lab">📈 Weekly Profit Auto = Received - Used</p><div class="big" id="wP" style="color:green">0</div><canvas id="chartWeek"></canvas>
+<!-- APP -->
+<div id="app" class="hid">
+<div class="c"><h3>📅 Daily Entry</h3>
+<div id="savedMsg" style="display:none;background:#e6f4ea;padding:8px;border-radius:8px">✅ Saved! New sheet ready</div>
+<div class="g2"><div><label class="lab">💰 Received</label><input id="dR" type="number"></div><div><label class="lab">💸 Used</label><input id="dU" type="number"></div></div>
+<label class="lab">📈 Remaining Auto</label><input id="dRem" readonly style="background:#e6f4ea;font-weight:800">
+<button type="button" style="width:100%;padding:13px;background:#0a8a4b;color:#fff;font-weight:800;border:0;border-radius:10px;margin-top:10px" onclick="saveDaily()">💾 Save Daily & New Sheet</button>
+</div>
+
+<div class="c"><h3>🗓️ Weekly Total - Auto</h3><p class="lab" id="wLab"></p>
+<div class="g2"><div><label class="lab">💰 Received</label><div class="big" id="wR">0</div></div><div><label class="lab">💸 Used</label><div class="big" id="wU">0</div></div></div>
+<label class="lab">📈 Weekly Profit Auto</label><div class="big" id="wP" style="color:green">0</div><canvas id="chartWeek"></canvas>
 </div>
 
 <div class="c"><h3>🗓️ Monthly Total - Auto</h3><p class="lab" id="mLab"></p>
-<div class="g2"><div><p class="lab">💰 Received</p><div class="big" id="mR">0</div></div><div><p class="lab">💸 Used</p><div class="big" id="mU">0</div></div></div>
-<p class="lab">📈 Monthly Profit Auto</p><div class="big" id="mP" style="color:green">0</div>
+<div class="g2"><div><label class="lab">💰</label><div class="big" id="mR">0</div></div><div><label class="lab">💸</label><div class="big" id="mU">0</div></div></div>
+<label class="lab">📈 Monthly Profit</label><div class="big" id="mP" style="color:green">0</div>
 </div>
 
 <div class="c"><h3>📆 Yearly Total - Auto</h3><p class="lab" id="yLab"></p>
-<div class="g2"><div><p class="lab">💰 Received</p><div class="big" id="yR">0</div></div><div><p class="lab">💸 Used</p><div class="big" id="yU">0</div></div></div>
-<p class="lab">📈 Yearly Profit Auto</p><div class="big" id="yP" style="color:green">0</div><canvas id="chartMonth"></canvas>
+<div class="g2"><div><label class="lab">💰</label><div class="big" id="yR">0</div></div><div><label class="lab">💸</label><div class="big" id="yU">0</div></div></div>
+<label class="lab">📈 Yearly Profit</label><div class="big" id="yP" style="color:green">0</div><canvas id="chartMonth"></canvas>
 </div>
 
 <div class="c"><h3>📊 Last 7 Days</h3><canvas id="chartDaily"></canvas></div>
-<div class="c"><h3>📜 History - Safely Saved</h3><table style="width:100%;font-size:12px;border-collapse:collapse"><thead><tr><th>📅</th><th>💰</th><th>💸</th><th>📈</th></tr></thead><tbody id="tb"></tbody></table></div>
+<div class="c"><h3>📜 History</h3><table style="width:100%;font-size:12px"><tbody id="tb"></tbody></table></div>
 </div>
 
 <div class="footer">📞 Support: <a href="https://wa.me/254181628290">0181628290</a> | 🏪 <span id="footBiz">Business</span></div>
 
 <script>
-// SIMPLE LOGIN - NO JSON OBJECTS
+// MAKE BUTTON FUNCTIONAL - BOTH WAYS
+document.getElementById('mainLoginBtn').addEventListener('touchend', function(e){ e.preventDefault(); doLogin(); });
+document.getElementById('mainLoginBtn').addEventListener('click', function(e){ e.preventDefault(); doLogin(); });
+
 function doLogin(){
-  var phone = document.getElementById('lu').value.trim();
-  var pass = document.getElementById('lp').value.trim();
-  var biz = document.getElementById('lb').value.trim();
-  var msg = document.getElementById('msg');
+  var phoneEl=document.getElementById('lu');
+  var passEl=document.getElementById('lp');
+  var bizEl=document.getElementById('lb');
+  var msg=document.getElementById('msg');
   
-  if(phone.length < 5){ msg.style.color='red'; msg.innerHTML='❌ Enter phone number'; return; }
-  if(pass.length < 2){ msg.style.color='red'; msg.innerHTML='❌ Enter password - set e.g. 1234'; return; }
-  if(biz.length < 2){ msg.style.color='red'; msg.innerHTML='❌ Enter business name - shows on top'; return; }
-
-  var savedPhone = localStorage.getItem('MY_PHONE');
-  var savedPass = localStorage.getItem('MY_PASS');
-
+  var phone=phoneEl.value.trim();
+  var pass=passEl.value.trim();
+  var biz=bizEl.value.trim();
+  
+  console.log('Login tapped', phone, pass, biz);
+  msg.style.color='#0b2e4e';
+  msg.innerHTML='⏳ Checking...';
+  
+  if(phone.length<3){ msg.style.color='red'; msg.innerHTML='❌ Enter phone'; phoneEl.focus(); return; }
+  if(pass.length<2){ msg.style.color='red'; msg.innerHTML='❌ Enter password e.g. 1234'; passEl.focus(); return; }
+  if(biz.length<2){ msg.style.color='red'; msg.innerHTML='❌ Enter business name'; bizEl.focus(); return; }
+  
+  var savedPhone=localStorage.getItem('MY_PHONE');
+  var savedPass=localStorage.getItem('MY_PASS');
+  
   if(!savedPhone){
-    // FIRST TIME - SAVE IT
     localStorage.setItem('MY_PHONE', phone);
     localStorage.setItem('MY_PASS', pass);
     localStorage.setItem('MY_BIZ', biz);
-    msg.style.color='green'; msg.innerHTML='✅ First time! Account created.<br>Phone: '+phone+'<br>Password: '+pass+'<br>Now entering...';
-    setTimeout(enterApp, 800);
+    msg.style.color='green';
+    msg.innerHTML='✅ First time! Saved.<br>Phone: '+phone+'<br>Pass: '+pass+'<br>Entering...';
+    setTimeout(enterApp, 600);
   } else {
-    // SECOND TIME - CHECK SAME PASSWORD
-    if(phone !== savedPhone){
-      msg.style.color='red'; msg.innerHTML='❌ Phone different! Use first phone: '+savedPhone+'<br>Or tap RESET';
-      return;
-    }
-    if(pass !== savedPass){
-      msg.style.color='red'; msg.innerHTML='❌ Wrong password! You set: '+savedPass.charAt(0)+'***<br>Enter: '+savedPass+'<br>Or tap RESET';
-      return;
-    }
+    if(phone!==savedPhone){ msg.style.color='red'; msg.innerHTML='❌ Use first phone: '+savedPhone+' or RESET'; return; }
+    if(pass!==savedPass){ msg.style.color='red'; msg.innerHTML='❌ Wrong password! Correct is: '+savedPass+'<br>Or tap RESET'; return; }
     localStorage.setItem('MY_BIZ', biz);
-    msg.style.color='green'; msg.innerHTML='✅ Correct password! Entering...';
-    setTimeout(enterApp, 500);
+    msg.style.color='green'; msg.innerHTML='✅ Correct! Entering...';
+    setTimeout(enterApp, 400);
   }
 }
 
 function enterApp(){
-  var biz = localStorage.getItem('MY_BIZ') || 'Business';
+  var biz=localStorage.getItem('MY_BIZ')||'Business';
   document.getElementById('loginP').classList.add('hid');
   document.getElementById('app').classList.remove('hid');
-  document.getElementById('bizT').innerHTML='🏪 '+biz;
   document.getElementById('footBiz').innerHTML=biz;
-  document.getElementById('payPhone').value = localStorage.getItem('MY_PHONE') || '';
-  draw(); clearForm(); checkReminder();
+  document.querySelector('.h').innerHTML='🏪 '+biz;
+  draw(); clearForm();
 }
 
 function resetAll(){
-  if(confirm('Reset password? Your daily records stay, only password resets.')){
-    localStorage.removeItem('MY_PHONE'); localStorage.removeItem('MY_PASS'); localStorage.removeItem('MY_BIZ');
+  if(confirm('Reset password? Daily data stays.')){
+    localStorage.removeItem('MY_PHONE'); localStorage.removeItem('MY_PASS');
     document.getElementById('msg').style.color='green';
-    document.getElementById('msg').innerHTML='✅ Reset done! Now set NEW phone + NEW password + business name and tap LOGIN';
-    document.getElementById('lp').value='';
+    document.getElementById('msg').innerHTML='✅ Reset done! Set NEW password now and tap green box.';
+    document.getElementById('lp').value=''; document.getElementById('lp').focus();
   }
 }
 
-// DAILY + TOTALS
-let db = JSON.parse(localStorage.getItem('biz_final_simple')||'{"daily":[],"payment":{"amt":500,"due":"","phone":""}}');
+// Totals
+let db=JSON.parse(localStorage.getItem('biz_simple_final')||'{"daily":[]}');
 function today(){return new Date().toISOString().slice(0,10)}
 function monday(d=new Date()){let x=new Date(d);let day=x.getDay();let diff=x.getDate()-day+(day==0?-6:1);x.setDate(diff);return x.toISOString().slice(0,10)}
 function sunday(m){let d=new Date(m);d.setDate(d.getDate()+6);return d.toISOString().slice(0,10)}
 let cDaily,cWeek,cMonth;
-function clearForm(){ document.getElementById('dR').value=''; document.getElementById('dU').value=''; document.getElementById('dRem').value=''; document.getElementById('dN').value=''; document.getElementById('sheetInfo').innerHTML='📄 Empty New Sheet - '+new Date().toLocaleTimeString(); var m=document.getElementById('savedMsg'); m.style.display='block'; setTimeout(function(){m.style.display='none'},2000); }
+function clearForm(){ document.getElementById('dR').value=''; document.getElementById('dU').value=''; document.getElementById('dRem').value=''; document.getElementById('savedMsg').style.display='block'; setTimeout(function(){document.getElementById('savedMsg').style.display='none'},2000); }
 function draw(){
  let daily=db.daily.slice(-7);
  if(cDaily) cDaily.destroy();
@@ -118,43 +151,26 @@ function draw(){
  let mon=monday(), sun=sunday(mon);
  let weekData=db.daily.filter(x=>x.date>=mon && x.date<=sun);
  let wR=weekData.reduce((s,x)=>s+(+x.received||0),0), wU=weekData.reduce((s,x)=>s+(+x.used||0),0);
- document.getElementById('wR').innerHTML='KSh '+wR.toLocaleString(); document.getElementById('wU').innerHTML='KSh '+wU.toLocaleString(); document.getElementById('wP').innerHTML='KSh '+(wR-wU).toLocaleString(); document.getElementById('wLab').innerHTML=mon+' to '+sun;
+ document.getElementById('wR').innerHTML='KSh '+wR; document.getElementById('wU').innerHTML='KSh '+wU; document.getElementById('wP').innerHTML='KSh '+(wR-wU); document.getElementById('wLab').innerHTML=mon+' to '+sun;
  if(cWeek) cWeek.destroy();
- cWeek=new Chart(document.getElementById('chartWeek'),{type:'doughnut',data:{labels:['Received','Used','Profit'],datasets:[{data:[wR,[STRIPPED]
+ cWeek=new Chart(document.getElementById('chartWeek'),{type:'doughnut',data:{labels:['Received',[STRIPPED]
  let mStr=new Date().toISOString().slice(0,7);
  let monthData=db.daily.filter(x=>x.date.startsWith(mStr));
  let mR=monthData.reduce((s,x)=>s+(+x.received||0),0), mU=monthData.reduce((s,x)=>s+(+x.used||0),0);
- document.getElementById('mR').innerHTML='KSh '+mR.toLocaleString(); document.getElementById('mU').innerHTML='KSh '+mU.toLocaleString(); document.getElementById('mP').innerHTML='KSh '+(mR-mU).toLocaleString(); document.getElementById('mLab').innerHTML=mStr;
+ document.getElementById('mR').innerHTML='KSh '+mR; document.getElementById('mU').innerHTML='KSh '+mU; document.getElementById('mP').innerHTML='KSh '+(mR-mU); document.getElementById('mLab').innerHTML=mStr;
  let yStr=new Date().getFullYear().toString();
  let yearData=db.daily.filter(x=>x.date.startsWith(yStr));
  let yR=yearData.reduce((s,x)=>s+(+x.received||0),0), yU=yearData.reduce((s,x)=>s+(+x.used||0),0);
- document.getElementById('yR').innerHTML='KSh '+yR.toLocaleString(); document.getElementById('yU').innerHTML='KSh '+yU.toLocaleString(); document.getElementById('yP').innerHTML='KSh '+(yR-yU).toLocaleString(); document.getElementById('yLab').innerHTML='Year '+yStr;
+ document.getElementById('yR').innerHTML='KSh '+yR; document.getElementById('yU').innerHTML='KSh '+yU; document.getElementById('yP').innerHTML='KSh '+(yR-yU); document.getElementById('yLab').innerHTML='Year '+yStr;
  if(cMonth) cMonth.destroy();
- cMonth=new Chart(document.getElementById('chartMonth'),{type:'bar',data:{labels:['Month Rec','Month Used','Profit'],datasets:[{label:mStr,data:[mR,[STRIPPED]
- document.getElementById('tb').innerHTML=db.daily.slice().reverse().map(r=>`<tr style="border-bottom:1px solid #eee"><td>${r.date}</td><td>💰${r.received}</td><td>💸${r.used}</td><td style="color:green;font-weight:700">📈${r.remaining}</td></tr>`).join('');
- localStorage.setItem('biz_final_simple',JSON.stringify(db));
+ cMonth=new Chart(document.getElementById('chartMonth'),{type:'bar',data:{labels:['Rec','Used','Profit'],datasets:[{label:mStr,data:[mR,[STRIPPED]
+ document.getElementById('tb').innerHTML=db.daily.slice().reverse().map(r=>`<tr><td>${r.date}</td><td>💰${r.received}</td><td>💸${r.used}</td><td style="color:green">📈${r.remaining}</td></tr>`).join('');
+ localStorage.setItem('biz_simple_final',JSON.stringify(db));
 }
 document.getElementById('dR').oninput=document.getElementById('dU').oninput=function(){document.getElementById('dRem').value=(+document.getElementById('dR').value||0)-(+document.getElementById('dU').value||0)}
 function saveDaily(){ let r=+document.getElementById('dR').value||0,u=+document.getElementById('dU').value||0; if(!r&&!u){alert('Enter amount');return} db.daily.push({date:today(),received:r,used:u,remaining:r-u}); draw(); clearForm(); }
-function checkReminder(){
- let p=db.payment; if(!p.due) return;
- let due=new Date(p.due), now=new Date(), diff=Math.ceil((due-now)/86400000);
- let biz=localStorage.getItem('MY_BIZ')||'Business';
- if(diff<=3){
-   let box=document.getElementById('alertBox'); box.style.display='block';
-   if(diff<0){box.innerHTML=`🔴 PAYMENT OVERDUE ${Math.abs(diff)} days! KSh ${p.amt} - SMS/WhatsApp sent to ${p.phone}`; sendWhatsAppAuto(); sendSMSAuto();}
-   else{box.innerHTML=`🟡 Payment due in ${diff} days - KSh ${p.amt} - Reminder to ${p.phone}`;}
-   setTimeout(function(){box.style.display='none'},8000);
- }
-}
-function sendWhatsAppAuto(){ let p=db.payment; let msg=`🔔 PAYMENT REMINDER ${localStorage.getItem('MY_BIZ')} KSh ${p.amt} Due ${p.due}`; let num=p.phone.replace(/^0/,'254'); window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank'); }
-function sendSMSAuto(){ let p=db.payment; let msg=`PAYMENT REMINDER ${localStorage.getItem('MY_BIZ')} KSh ${p.amt} Due ${p.due}`; window.open('sms:'+p.phone+'?body='+encodeURIComponent(msg),'_blank'); }
 
-// Auto fill if already logged
-let savedP=localStorage.getItem('MY_PHONE');
-if(savedP){ document.getElementById('lu').value=savedP; document.getElementById('lb').value=localStorage.getItem('MY_BIZ')||''; }
+// Auto fill
+let sp=localStorage.getItem('MY_PHONE'); if(sp){ document.getElementById('lu').value=sp; document.getElementById('lb').value=localStorage.getItem('MY_BIZ')||''; }
 </script>
-
-<!-- Hidden payment config - not visible card -->
-<div style="display:none"><input id="payPhone"><input id="payAmt" value="500"><input id="payDue" type="date"></div>
 </body></html>
