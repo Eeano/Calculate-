@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Business Financial System</title>
-<style>:root{--p:#0b2e4e;--a:#0a8a4b;--bg:#f4f6f8;--card:#fff;--b:#d0d7de}*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:var(--bg);padding-bottom:65px} .h{background:var(--p);color:#fff;padding:14px;text-align:center;position:sticky;top:0;z-index:10} .c{background:var(--card);margin:10px;border-radius:12px;padding:14px;border:1px solid var(--b)} .lab{font-size:11px;opacity:.6;text-transform:uppercase;margin:6px 0 3px} input,textarea{width:100%;padding:10px;border:1px solid var(--b);border-radius:8px} button{padding:10px 14px;border:0;border-radius:8px;background:var(--a);color:#fff;font-weight:700} .sec{background:#e9ecef;color:#111} .danger{background:#dc3545;color:#fff} .warn{background:#fff3cd;border:1px solid #ffc107;color:#856404} .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px} .hid{display:none} .big{font-size:22px;font-weight:800} canvas{width:100%!important;max-height:240px} .ok{background:#e6f4ea;border:1px solid #a3d9b1;padding:8px;border-radius:8px;font-size:13px;display:none} .footer{position:fixed;bottom:0;left:0;right:0;background:#0b2e4e;color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:700;z-index:20} .footer a{color:#25D366;text-decoration:none} .bizTop{font-size:20px;font-weight:900}</style>
+<style>:root{--p:#0b2e4e;--a:#0a8a4b;--bg:#f4f6f8;--card:#fff;--b:#d0d7de}*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:var(--bg);padding-bottom:65px} .h{background:var(--p);color:#fff;padding:14px;text-align:center;position:sticky;top:0;z-index:10} .c{background:var(--card);margin:10px;border-radius:12px;padding:14px;border:1px solid var(--b)} .lab{font-size:11px;opacity:.6;text-transform:uppercase;margin:6px 0 3px} input,textarea{width:100%;padding:10px;border:1px solid var(--b);border-radius:8px} button{padding:12px 14px;border:0;border-radius:8px;background:var(--a);color:#fff;font-weight:800;font-size:15px;width:100%} .sec{background:#e9ecef;color:#111} .warn{background:#fff3cd;border:1px solid #ffc107;color:#856404} .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px} .hid{display:none} .big{font-size:22px;font-weight:800} canvas{width:100%!important;max-height:240px} .ok{background:#e6f4ea;border:1px solid #a3d9b1;padding:8px;border-radius:8px;font-size:13px;display:none} .footer{position:fixed;bottom:0;left:0;right:0;background:#0b2e4e;color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:700;z-index:20} .footer a{color:#25D366;text-decoration:none} .bizTop{font-size:20px;font-weight:900}</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head><body>
 <div class="h"><div class="bizTop" id="bizT">🏪 Business Financial System</div></div>
-<div id="loginP"><div class="c"><h3>🔐 Login - Fixed No Refusal</h3>
-<p class="lab">📱 Your Phone</p><input id="lu" placeholder="0712345678"><p class="lab">🔑 Password (any you remember, or new)</p><input id="lp" type="password"><p class="lab">🏢 Business Name (Shows on Top ONLY)</p><input id="lb" placeholder="Mama Sophia Hotel">
-<button id="lBtn" style="width:100%;margin-top:10px">➡️ Enter System</button>
-<button id="resetBtn" class="danger" style="width:100%;margin-top:8px">🔄 Reset Login - If refusing, tap here</button>
-<p class="lab" id="loginMsg" style="color:red"></p>
+<div id="loginP"><div class="c"><h3>🔐 Login - Fixed (Tap to Enter)</h3>
+<p class="lab">📱 Your Phone (for reminders)</p><input id="lu" value="0181628290"><p class="lab">🏢 Business Name (Shows on Top ONLY)</p><input id="lb" placeholder="Enter Business Name e.g. Eeano Shop">
+<button id="lBtn" onclick="doLogin()">➡️ TAP TO ENTER SYSTEM</button>
+<p class="lab" style="color:green;margin-top:8px">✅ No password needed - Just phone + business name</p>
 </div></div>
 <div id="app" class="hid">
 <div class="c warn"><h3>💳 Payment Reminder - Via Your Number</h3>
 <div class="g2"><div><p class="lab">💵 Amount</p><input id="payAmt" type="number" value="500"></div><div><p class="lab">📅 Due Date</p><input id="payDue" type="date"></div></div>
 <p class="lab">📱 Your Number for Reminder</p><input id="payPhone">
 <p class="lab">📌 Status</p><div id="payStatus" style="font-weight:700;font-size:13px">⏳ Set due date</div>
-<div class="g2" style="margin-top:8px"><button id="savePay" style="flex:1">💾 Save Reminder</button><button id="sendRem" class="sec">💬 Send to My Number</button></div>
+<div class="g2" style="margin-top:8px"><button onclick="savePay()">💾 Save Reminder</button><button class="sec" onclick="sendRem()">💬 Send to My Number</button></div>
 </div>
 <div class="c"><h3>📅 Daily Entry 💰💸 - Auto New Sheet</h3>
 <div id="savedMsg" class="ok">✅ Saved safely! 📁 New empty sheet ready 👇</div>
 <div class="g2"><div><p class="lab">💰 Received</p><input id="dR" type="number" placeholder="5000"></div><div><p class="lab">💸 Used</p><input id="dU" type="number" placeholder="2000"></div></div>
 <p class="lab">📈 Remaining Auto</p><input id="dRem" readonly style="background:#e6f4ea;font-weight:700">
 <p class="lab">📝 Notes</p><textarea id="dN"></textarea>
-<div class="g2" style="margin-top:8px"><button id="sD" style="flex:1">💾 Save Daily & New Sheet</button><button id="waD" class="sec">📤 Share</button></div>
+<div class="g2" style="margin-top:8px"><button onclick="saveDaily()">💾 Save Daily & New Sheet</button><button class="sec" onclick="shareDaily()">📤 Share</button></div>
 <p class="lab" id="sheetInfo">📄 New Sheet</p>
 </div>
 <div class="c"><h3>📊 Daily Chart</h3><canvas id="chartDaily"></canvas></div>
@@ -32,37 +31,34 @@
 </div>
 <div class="footer">📞 Support: <a href="https://wa.me/254181628290">0181628290</a> | 🏪 <span id="footBiz">Business Financial System</span></div>
 <script>
-const $=id=>document.getElementById(id);
 let db=JSON.parse(localStorage.getItem('biz_db_v6')||'{"daily":[],"payment":{}}');
 function today(){return new Date().toISOString().slice(0,10)}
 function monday(d=new Date()){let x=new Date(d);let day=x.getDay();let diff=x.getDate()-day+(day==0?-6:1);x.setDate(diff);return x.toISOString().slice(0,10)}
 function sunday(m){let d=new Date(m);d.setDate(d.getDate()+6);return d.toISOString().slice(0,10)}
 let cDaily,cWeek;
+function $(id){return document.getElementById(id)}
 function clearForm(){ $('dR').value=''; $('dU').value=''; $('dRem').value=''; $('dN').value=''; $('sheetInfo').innerText='📄 Empty New Sheet - '+new Date().toLocaleTimeString(); $('dR').focus(); $('savedMsg').style.display='block'; setTimeout(()=>$('savedMsg').style.display='none',3000); }
 function updateTop(biz){ $('bizT').innerText='🏪 '+biz; $('footBiz').innerText=biz; }
 function checkPayReminder(){ let p=db.payment; if(!p.due){$('payStatus').innerText='⏳ No due date set'; return} let due=new Date(p.due); let now=new Date(); let diff=Math.ceil((due-now)/(1000*60*60*24)); if(diff<0){$('payStatus').innerHTML='🔴 OVERDUE '+Math.abs(diff)+' days! 💳 KSh '+p.amt; $('payStatus').style.color='red'} else if(diff<=3){$('payStatus').innerHTML='🟡 Due in '+diff+' days! 💳 KSh '+p.amt; $('payStatus').style.color='orange'} else{$('payStatus').innerHTML='🟢 OK - Due '+p.due+' KSh '+p.amt; $('payStatus').style.color='green'} }
 function draw(){ let daily=db.daily.slice(-7); if(cDaily) cDaily.destroy(); cDaily=new Chart($('chartDaily'),{type:'bar',data:{labels:daily.map(r=>'📅 '+r.date.slice(5)),datasets:[{label:'💰 Received',data:daily.map(r=>r.received)},[STRIPPED] Used',data:daily.map(r=>r.used)}]}}); let mon=monday(), sun=sunday(mon); let thisWeek=db.daily.filter(x=>x.date>=mon&&x.date<=sun); let wR=thisWeek.reduce((s,x)=>s+(+x.received||0),0), wU=thisWeek.reduce((s,x)=>s+(+x.used||0),0); $('wR').innerText=wR.toLocaleString(); $('wU').innerText=wU.toLocaleString(); $('wP').innerText=(wR-wU).toLocaleString(); $('wLab').innerText='🗓️ '+mon+' ➡️ '+sun; if(cWeek) cWeek.destroy(); cWeek=new Chart($('chartWeek'),{type:'doughnut',data:{labels:['💰 Rec','💸 Used','📈 Profit'],datasets:[{data:[wR,[STRIPPED] $('tb').innerHTML=db.daily.slice().reverse().map(r=>`<tr><td>📅 ${r.date}</td><td>💰 ${r.received}</td><td>💸 ${r.used}</td><td>📈 ${r.remaining}</td></tr>`).join(''); localStorage.setItem('biz_db_v6',JSON.stringify(db)); checkPayReminder(); }
-async function hash(p){let b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-$('lBtn').onclick=async()=>{ 
- let u=$('lu').value.trim(), pw=$('lp').value, biz=$('lb').value.trim(); 
- if(!u||!biz){$('loginMsg').innerText='⚠️ Enter phone and business name';return}
- if(!pw){pw='1234'} // allow empty password fix
- let h=await hash(pw); let auth=JSON.parse(localStorage.getItem('biz_auth')||'{}'); 
- if(!auth[u]){auth[u]={hash:h,biz:biz};localStorage.setItem('biz_auth',JSON.stringify(auth))}
- else{ // FIX: if wrong password, update it instead of refusing
-   auth[u]={hash:h,biz:biz};
-   localStorage.setItem('biz_auth',JSON.stringify(auth));
- }
- localStorage.setItem('biz_user',u);localStorage.setItem('biz_name',biz); 
- $('loginP').classList.add('hid');$('app').classList.remove('hid'); updateTop(biz); $('payPhone').value=u; 
- if(db.payment.amt){$('payAmt').value=db.payment.amt; $('payDue').value=db.payment.due; $('payPhone').value=db.payment.phone||u} 
- draw(); clearForm(); 
-};
-$('resetBtn').onclick=()=>{ if(confirm('Reset login? Your daily data will stay, only login will reset.')){localStorage.removeItem('biz_auth');localStorage.removeItem('biz_user');$('loginMsg').innerText='✅ Reset done! Now enter phone, business name, any password and tap Enter.'; $('loginMsg').style.color='green';} };
-$('dR').oninput=$('dU').oninput=()=>{$('dRem').value=(+$('dR').value||0)-(+$('dU').value||0)};
-$('sD').onclick=()=>{ let r=+$('dR').value||0,u=+$('dU').value||0; if(!r&&!u){alert('Enter 💰 or 💸');return} db.daily.push({date:today(),time:new Date().toLocaleTimeString(),received:r,used:u,remaining:r-u,notes:$('dN').value}); draw(); clearForm(); };
-$('savePay').onclick=()=>{ let amt=$('payAmt').value, due=$('payDue').value, phone=$('payPhone').value; if(!due||!amt){alert('Enter amount and due date');return} db.payment={amt:amt,due:due,phone:phone}; draw(); alert('✅ Payment reminder saved via '+phone); };
-$('sendRem').onclick=()=>{ let p=db.payment; if(!p.due){alert('Save payment first');return} let msg=`🔔 PAYMENT REMINDER - ${localStorage.getItem('biz_name')}\n💳 Amount: KSh ${p.amt}\n📅 Due: ${p.due}\n📱 Owner: ${p.phone}`; let num=p.phone.replace(/^0/,'254'); window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank'); };
-$('waD').onclick=()=>{ window.open('https://wa.me/'+$('payPhone').value.replace(/^0/,'254')+'?text='+encodeURIComponent('Daily '+today()),'_blank'); };
+function doLogin(){
+ let u=$('lu').value.trim(); let biz=$('lb').value.trim();
+ if(!u){alert('Enter phone');return}
+ if(!biz){alert('Enter business name - This shows on top');return}
+ localStorage.setItem('biz_user',u);
+ localStorage.setItem('biz_name',biz);
+ $('loginP').classList.add('hid');
+ $('app').classList.remove('hid');
+ updateTop(biz);
+ $('payPhone').value=u;
+ if(db.payment.amt){$('payAmt').value=db.payment.amt; $('payDue').value=db.payment.due; $('payPhone').value=db.payment.phone||u}
+ draw();
+ clearForm();
+}
+$('dR').oninput=$('dU').oninput=function(){$('dRem').value=(+$('dR').value||0)-(+$('dU').value||0)};
+function saveDaily(){ let r=+$('dR').value||0,u=+$('dU').value||0; if(!r&&!u){alert('Enter 💰 or 💸');return} db.daily.push({date:today(),time:new Date().toLocaleTimeString(),received:r,used:u,remaining:r-u,notes:$('dN').value}); draw(); clearForm(); }
+function savePay(){ let amt=$('payAmt').value, due=$('payDue').value, phone=$('payPhone').value; if(!due||!amt){alert('Enter amount and due date');return} db.payment={amt:amt,due:due,phone:phone}; draw(); alert('✅ Payment reminder saved via '+phone); }
+function sendRem(){ let p=db.payment; if(!p.due){alert('Save payment first');return} let msg=`🔔 PAYMENT REMINDER - ${localStorage.getItem('biz_name')}\n💳 Amount: KSh ${p.amt}\n📅 Due: ${p.due}\n📱 Owner: ${p.phone}`; let num=p.phone.replace(/^0/,'254'); window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank'); }
+function shareDaily(){ window.open('https://wa.me/'+$('payPhone').value.replace(/^0/,'254')+'?text='+encodeURIComponent('Daily '+today()),'_blank'); }
 if(localStorage.getItem('biz_user')){ $('lu').value=localStorage.getItem('biz_user'); $('lb').value=localStorage.getItem('biz_name')||''; $('loginP').classList.add('hid');$('app').classList.remove('hid'); updateTop(localStorage.getItem('biz_name')||'Business'); $('payPhone').value=localStorage.getItem('biz_user'); if(db.payment.amt){$('payAmt').value=db.payment.amt; $('payDue').value=db.payment.due; $('payPhone').value=db.payment.phone||localStorage.getItem('biz_user')} draw(); }
 </script></body></html>
